@@ -1,0 +1,18 @@
+fmul		f_mul
+fmul2		f_mul_df
+fexpand		f_to_df
+f_to_extended	f_to_ef
+dtrunc		df_to_f
+efclip		ef_clip_f
+
+
+
+
+
+
+
+
+
+
+
+
