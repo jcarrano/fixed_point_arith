@@ -70,6 +70,9 @@ typedef dfrac efrac;
 	/* -1 . This is the smallest value a frac can assume
 	 */
 
+#define FRAC_MAX INT16_MAX /* 1 - 2**(-15) or "almost 1" */
+#define FRAC_MIN INT16_MIN /* -1 */
+
 /* for the dfrac type */
 #define DFRAC_1 (-(INT32_MIN>>1))
 	/* 1. This is *really* the value 1.
@@ -83,13 +86,27 @@ typedef dfrac efrac;
 
 #define DFRAC_minus1 (INT32_MIN>>1) /* -1 */
 
-#define DFRAC_MAX INT32_MAX /* 2 - 2^(-31), or "almost 2" */
+#define DFRAC_MAX INT32_MAX /* 2 - 2**(-31), or "almost 2" */
 #define DFRAC_MIN INT32_MIN /* -2 */
 
-/* Conversions: frac <--> double */
+/* for the efrac type */
 
-#define FRAC2DBL(n) (((double)(n))/(-(double)FRAC_minus1))
-#define F_TO_FRAC(f) ((frac)(-f*FRAC_minus1))
+#define EFRAC_minus1 ((efrac)FRAC_minus1)
+#define EFRAC_1 (-EFRAC_minus1)
+
+#define EFRAC_MAX INT32_MAX
+#define EFRAC_MIN INT32_MIN
+
+/* Conversions: {d,e}frac <--> double */
+
+#define F_TO_DOUBLE(n) (((double)(n))/(-(double)FRAC_minus1))
+#define DOUBLE_TO_F(f) ((frac)(-f*FRAC_minus1))
+
+#define DF_TO_DOUBLE(n) (((double)(n))/((double)DFRAC_1))
+#define DOUBLE_TO_DF(f) ((dfrac)(f*DFRAC_1))
+
+#define EF_TO_DOUBLE(n) (((double)(n))/((double)EFRAC_1))
+#define DOUBLE_TO_EF(f) ((efrac)(f*EFRAC_1))
 
 /* ************************************************************************ *
  * 3D Vector Support

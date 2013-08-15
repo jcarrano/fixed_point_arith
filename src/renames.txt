@@ -1,18 +1,28 @@
+- Macros
+
+SIGN		F_SIGN
+FRAC2DBL	F_TO_DOUBLE
+F_TO_FRAC	DOUBLE_TO_F
+
+--------- Fractional -----------------
+
+- Multiply
+
 fmul		f_mul
 fmul2		f_mul_df
+
+- Conversions
+
 fexpand		f_to_df
 f_to_extended	f_to_ef
 dtrunc		df_to_f
-efclip		ef_clip_f
+efclip		ef_to_f
 
+- Other
 
+frac_sat	f_sat
 
-
-
-
-
-
-
+-
 
 
 
