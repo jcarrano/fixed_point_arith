@@ -21,7 +21,7 @@
 
 #include "fixed_point_types.h"
 
-#define SIGN(a) (((a) >= 0)? 1 : -1)
+#define F_SIGN(a) (((a) >= 0)? 1 : -1)
 
 /* ********************************************************************** *
  * Fractional numbers
@@ -34,18 +34,18 @@
  */
 
 /* 1.15 x 1.15 => 1.15 */
-static frac fmul(frac a, frac b)
+_FTA_KW frac f_mul(frac a, frac b)
 {
 	return ((((dfrac)a) * b) << 1) >> FRAC_BIT;
 }
 
 /* 1.15 x 1.15 => 2.30 */
-static dfrac fmul2(frac a, frac b)
+_FTA_KW dfrac f_mul_df(frac a, frac b)
 {
 	return (((dfrac)a) * b);
 }
 
-static frac dtrunc(dfrac x)
+_FTA_KW frac df_to_f(dfrac x)
 { /* 2.30 -> 1.15 */
 	if (x >= DFRAC_1)
 		return FRAC_1;
@@ -55,28 +55,27 @@ static frac dtrunc(dfrac x)
 		return (x << 1) >> FRAC_BIT;
 }
 
-static dfrac fexpand(frac x)
+_FTA_KW dfrac f_to_df(frac x)
 { /* 1.15 -> 2.30 */
 	return ((dfrac)x)<<(FRAC_BIT - 1);
 }
 
-#define f_to_extended(x) ((efrac)(x))
+#define f_to_ef(x) ((efrac)(x))
 
-static efrac efdiv(frac dividend, efrac divisor)
+_FTA_KW efrac efdiv(frac dividend, efrac divisor)
 {
-	efrac result = f_to_extended(dividend);
+	efrac result = f_to_ef(dividend);
 	result << (FRAC_BIT - 1);
 
 	return result/divisor;
-
 }
 
-static frac efclip(efrac x)
+_FTA_KW frac ef_to_f(efrac x)
 {
 	return (x > FRAC_minus1)? ((x < FRAC_1)? x : FRAC_1) : FRAC_minus1;
 }
 
-static frac frac_sat (frac x, frac sat)
+_FTA_KW frac f_mul (frac x, frac sat)
 {
 
 	return  (x > -sat)? ((x < sat)? x : sat) : -sat;
@@ -270,9 +269,9 @@ static vec3 vfmul(vec3 a, frac f)
 {
 	vec3 r;
 
-	r.x = fmul(a.x, f);
-	r.y = fmul(a.y, f);
-	r.z = fmul(a.z, f);
+	r.x = f_mul(a.x, f);
+	r.y = f_mul(a.y, f);
+	r.z = f_mul(a.z, f);
 
 	return r;
 }
@@ -281,9 +280,9 @@ static dvec3 vfmul2(vec3 a, frac f)
 {
 	dvec3 r;
 
-	r.x = fmul2(a.x, f);
-	r.y = fmul2(a.y, f);
-	r.z = fmul2(a.z, f);
+	r.x = f_mul_df(a.x, f);
+	r.y = f_mul_df(a.y, f);
+	r.z = f_mul_df(a.z, f);
 
 	return r;
 }
@@ -333,9 +332,9 @@ static vec3 evclip(evec3 v)
 {
 	vec3 r;
 
-	r.x = efclip(v.x);
-	r.y = efclip(v.y);
-	r.z = efclip(v.z);
+	r.x = ef_to_f(v.x);
+	r.y = ef_to_f(v.y);
+	r.z = ef_to_f(v.z);
 
 	return r;
 }
@@ -355,9 +354,9 @@ static dvec3 vexpand(vec3 a)
 {
 	dvec3 r;
 
-	r.x=fexpand(a.x);
-	r.y=fexpand(a.y);
-	r.z=fexpand(a.z);
+	r.x=f_to_df(a.x);
+	r.y=f_to_df(a.y);
+	r.z=f_to_df(a.z);
 
 	return r;
 }
@@ -388,9 +387,9 @@ static dvec3 dvsumsat(dvec3 a, dvec3 b)
 
 static vec3 vsat (vec3 a, frac sat)
 {
-	a.x = frac_sat (a.x, sat);
-	a.y = frac_sat (a.y, sat);
-	a.z = frac_sat (a.z, sat);
+	a.x = f_mul (a.x, sat);
+	a.y = f_mul (a.y, sat);
+	a.z = f_mul (a.z, sat);
 
 	return a;
 }
@@ -398,7 +397,7 @@ static vec3 vsat (vec3 a, frac sat)
 static vec3 vec_clip_d(dvec3 a)
 {
 	vec3 r;
-#define _DFRAC_CLIP(k) (((k) >= DFRAC_minus1)? (((k) < DFRAC_1)? dtrunc(k): FRAC_1) : FRAC_minus1)
+#define _DFRAC_CLIP(k) (((k) >= DFRAC_minus1)? (((k) < DFRAC_1)? df_to_f(k): FRAC_1) : FRAC_minus1)
 	r.x = _DFRAC_CLIP(a.x);
 	r.y = _DFRAC_CLIP(a.y);
 	r.z = _DFRAC_CLIP(a.z);
@@ -432,7 +431,7 @@ typedef struct {
 static  quat qtrunc(dquat q)
 {
 	quat s;
-#define _QTR(e) s.e = dtrunc(q.e)
+#define _QTR(e) s.e = df_to_f(q.e)
 
 	_QTR(r);
 	_QTR(v.x);
@@ -447,18 +446,18 @@ static  frac q_normerror(quat q)
    *	calcula una aproximación a (1 - norm(q))
    *	La aproxiimación está en decir que sqrt(x) = 0.5(x + 1)
    */
-	return FRAC_0_5 - dtrunc((fmul2(q.r, q.r) + fmul2(q.v.x, q.v.x) +
-			fmul2(q.v.y, q.v.y) + fmul2(q.v.z, q.v.z))/2);
+	return FRAC_0_5 - df_to_f((f_mul_df(q.r, q.r) + f_mul_df(q.v.x, q.v.x) +
+			f_mul_df(q.v.y, q.v.y) + f_mul_df(q.v.z, q.v.z))/2);
 }
 
 static  dquat qscale2(quat q, frac f)
 {
 	dquat s;
 
-	s.r = fmul2(q.r, f);
-	s.v.x = fmul2(q.v.x, f);
-	s.v.y = fmul2(q.v.y, f);
-	s.v.z = fmul2(q.v.z, f);
+	s.r = f_mul_df(q.r, f);
+	s.v.x = f_mul_df(q.v.x, f);
+	s.v.y = f_mul_df(q.v.y, f);
+	s.v.z = f_mul_df(q.v.z, f);
 
 	return s;
 }
@@ -467,10 +466,10 @@ static  quat qscale(quat q, frac f)
 {
 	quat s;
 
-	s.r = fmul(q.r, f);
-	s.v.x = fmul(q.v.x, f);
-	s.v.y = fmul(q.v.y, f);
-	s.v.z = fmul(q.v.z, f);
+	s.r = f_mul(q.r, f);
+	s.v.x = f_mul(q.v.x, f);
+	s.v.y = f_mul(q.v.y, f);
+	s.v.z = f_mul(q.v.z, f);
 
 	return s;
 }
@@ -491,10 +490,10 @@ static  quat qmul(quat q, quat p)
 {
 	quat s;
 
-	s.r = (fmul(q.r,p.r)-fmul(q.v.x,p.v.x)-fmul(q.v.y,p.v.y)-fmul(q.v.z,p.v.z));
-	s.v.x = (fmul(p.r,q.v.x)+fmul(p.v.x,q.r)-fmul(p.v.y,q.v.z)+fmul(p.v.z,q.v.y));
-	s.v.y = (fmul(p.r,q.v.y)+fmul(p.v.x,q.v.z)+fmul(p.v.y,q.r)-fmul(p.v.z,q.v.x));
-	s.v.z = (fmul(p.r,q.v.z)-fmul(p.v.x,q.v.y)+fmul(p.v.y,q.v.x)+fmul(p.v.z,q.r));
+	s.r = (f_mul(q.r,p.r)-f_mul(q.v.x,p.v.x)-f_mul(q.v.y,p.v.y)-f_mul(q.v.z,p.v.z));
+	s.v.x = (f_mul(p.r,q.v.x)+f_mul(p.v.x,q.r)-f_mul(p.v.y,q.v.z)+f_mul(p.v.z,q.v.y));
+	s.v.y = (f_mul(p.r,q.v.y)+f_mul(p.v.x,q.v.z)+f_mul(p.v.y,q.r)-f_mul(p.v.z,q.v.x));
+	s.v.z = (f_mul(p.r,q.v.z)-f_mul(p.v.x,q.v.y)+f_mul(p.v.y,q.v.x)+f_mul(p.v.z,q.r));
 
 	return s;
 }
@@ -503,10 +502,10 @@ static  dquat qmul2(quat q, quat p, int f)
 {
 	dquat s;
 
-	s.r = (fmul2(q.r,p.r)-fmul2(q.v.x,p.v.x)-fmul2(q.v.y,p.v.y)-fmul2(q.v.z,p.v.z))/f;
-	s.v.x = (fmul2(p.r,q.v.x)+fmul2(p.v.x,q.r)-fmul2(p.v.y,q.v.z)+fmul2(p.v.z,q.v.y))/f;
-	s.v.y = (fmul2(p.r,q.v.y)+fmul2(p.v.x,q.v.z)+fmul2(p.v.y,q.r)-fmul2(p.v.z,q.v.x))/f;
-	s.v.z = (fmul2(p.r,q.v.z)-fmul2(p.v.x,q.v.y)+fmul2(p.v.y,q.v.x)+fmul2(p.v.z,q.r))/f;
+	s.r = (f_mul_df(q.r,p.r)-f_mul_df(q.v.x,p.v.x)-f_mul_df(q.v.y,p.v.y)-f_mul_df(q.v.z,p.v.z))/f;
+	s.v.x = (f_mul_df(p.r,q.v.x)+f_mul_df(p.v.x,q.r)-f_mul_df(p.v.y,q.v.z)+f_mul_df(p.v.z,q.v.y))/f;
+	s.v.y = (f_mul_df(p.r,q.v.y)+f_mul_df(p.v.x,q.v.z)+f_mul_df(p.v.y,q.r)-f_mul_df(p.v.z,q.v.x))/f;
+	s.v.z = (f_mul_df(p.r,q.v.z)-f_mul_df(p.v.x,q.v.y)+f_mul_df(p.v.y,q.v.x)+f_mul_df(p.v.z,q.r))/f;
 
 	return s;
 }
@@ -585,10 +584,10 @@ static quat qdecompose(quat q, u8 axis)
 		break;
 	}
 
-	norm_err = FRAC_0_5 - dtrunc(fmul2(q.r, q.r) +
-						fmul2(the_axis,the_axis))/2;
-	ret.r = q.r + fmul(norm_err, q.r);
-	the_axis = the_axis + fmul(norm_err, the_axis);
+	norm_err = FRAC_0_5 - df_to_f(f_mul_df(q.r, q.r) +
+						f_mul_df(the_axis,the_axis))/2;
+	ret.r = q.r + f_mul(norm_err, q.r);
+	the_axis = the_axis + f_mul(norm_err, the_axis);
 
 	switch (axis) {
 	case AXIS_X:
