@@ -11,6 +11,10 @@ F_TO_FRAC	DOUBLE_TO_F
 fmul		f_mul
 fmul2		f_mul_df
 
+- Divide
+
+efdiv		f_ef_div
+
 - Conversions
 
 fexpand		f_to_df
@@ -22,7 +26,6 @@ efclip		ef_to_f
 
 frac_sat	f_sat
 
--
 
 
 
