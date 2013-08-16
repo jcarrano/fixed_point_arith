@@ -263,9 +263,9 @@ static evec3 vefdiv(vec3 a, efrac divisor)
 {
 	evec3 r;
 
-	r.x = efdiv(a.x, divisor);
-	r.y = efdiv(a.y, divisor);
-	r.z = efdiv(a.x, divisor);
+	r.x = f_ef_div(a.x, divisor);
+	r.y = f_ef_div(a.y, divisor);
+	r.z = f_ef_div(a.x, divisor);
 
 	return r;
 }
