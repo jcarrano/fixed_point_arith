@@ -62,12 +62,17 @@ _FTA_KW dfrac f_to_df(frac x)
 
 #define f_to_ef(x) ((efrac)(x))
 
-_FTA_KW efrac efdiv(frac dividend, efrac divisor)
+/* f_ef_div
+ * 	Divide a frac by an efrac and return an efrac.
+ */
+_FTA_KW efrac f_ef_div(frac dividend, efrac divisor)
 {
-	efrac result = f_to_ef(dividend);
-	result << (FRAC_BIT - 1);
+	/* When dividing, the implicit divisors (2**(FRAC_BIT-1)) cancel out,
+	 * and we get the ratio as an integer. To get a efrac we must multiply
+	 * the divident by 2**(FRAC_BIT-1) BEFORE taking the quotient */
+	efrac new_dividend = f_to_ef(dividend) << (FRAC_BIT - 1);
 
-	return result/divisor;
+	return new_dividend/divisor;
 }
 
 _FTA_KW frac ef_to_f(efrac x)
