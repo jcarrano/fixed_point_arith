@@ -11,6 +11,7 @@ a.out
 *.test
 *.pdf
 .libs
+*.a
 
 syntax: regexp
 .*\#.*\#$
