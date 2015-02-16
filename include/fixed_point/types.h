@@ -1,29 +1,10 @@
 /**
- * @file	fixed_point_types.h
+ * @file	types.h
  * @author	Juan I Carrano <juan@carrano.com.ar>
  * @copyright 	Copyright 2013 Juan I Carrano <juan@carrano.com.ar>
  * @license	GNU General Public License, version 3.
  *
  * @brief Type definitions for fixed point arithmetic types.
- */
-/*
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
- * MA 02110-1301, USA.
- *
- *
- * Type definitios for fixed point numbers, vectors and quaternions
  */
 
 #ifndef FIXED_POINT_TYPES_H
@@ -198,6 +179,7 @@ static const dfrac DFZero = {0};
 static const efrac EFZero = {0};
 
 /** @}
+ *  @}
  *
  * @defgroup fxp_conv Conversions to and from double/float
  * @{

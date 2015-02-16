@@ -22,7 +22,7 @@
 /**
  * Truncate double precision quaternion to single precision.
  */
-FXP_DECLARATION(_FXP_INLINE_KW quat dq_to_q(dquat q))
+FXP_DECLARATION(quat dq_to_q(dquat q))
 {
 	quat s;
 #define _QTR(e) s.e = df_to_f(q.e)
@@ -43,7 +43,7 @@ FXP_DECLARATION(_FXP_INLINE_KW quat dq_to_q(dquat q))
  * Calculates an approximation to (1 - norm(q))
  * The approximation used is sqrt(x) = 0.5(x + 1) for x near 1
  */
-FXP_DECLARATION(_FXP_INLINE_KW frac q_xnormerror(quat q))
+FXP_DECLARATION(frac q_xnormerror(quat q))
 {
 	frac _0_5 = {FRAC_0_5_V};
 	return f_sub(_0_5, df_to_f(
@@ -55,7 +55,7 @@ FXP_DECLARATION(_FXP_INLINE_KW frac q_xnormerror(quat q))
 /**
  * Scale a quaternion by a fractional, return double precision quaternion.
  */
-FXP_DECLARATION(_FXP_INLINE_KW dquat q_scale_dq(quat q, frac f))
+FXP_DECLARATION(dquat q_scale_dq(quat q, frac f))
 {
 	dquat s;
 
@@ -70,7 +70,7 @@ FXP_DECLARATION(_FXP_INLINE_KW dquat q_scale_dq(quat q, frac f))
 /**
  * Scale a quaternion by a fractional, return simple precision quaternion.
  */
-FXP_DECLARATION(_FXP_INLINE_KW quat q_scale(quat q, frac f))
+FXP_DECLARATION(quat q_scale(quat q, frac f))
 {
 	quat s;
 
@@ -87,7 +87,7 @@ FXP_DECLARATION(_FXP_INLINE_KW quat q_scale(quat q, frac f))
  *
  * Negates the vector component.
  */
-FXP_DECLARATION(_FXP_INLINE_KW quat q_conj(quat q))
+FXP_DECLARATION(quat q_conj(quat q))
 {
 	quat p;
 
@@ -102,7 +102,7 @@ FXP_DECLARATION(_FXP_INLINE_KW quat q_conj(quat q))
 /**
  * Quaternion multiplication, return value is simple precision.
  */
-FXP_DECLARATION(_FXP_INLINE_KW quat q_mul(quat q, quat p))
+FXP_DECLARATION(quat q_mul(quat q, quat p))
 {
 	quat s;
 
@@ -130,7 +130,7 @@ FXP_DECLARATION(_FXP_INLINE_KW quat q_mul(quat q, quat p))
  *
  * @return	(Q x P)/f
  */
-FXP_DECLARATION(_FXP_INLINE_KW dquat q_mul_dq(quat q, quat p, int f))
+FXP_DECLARATION(dquat q_mul_dq(quat q, quat p, int f))
 {
 	dquat s;
 
@@ -156,7 +156,7 @@ FXP_DECLARATION(_FXP_INLINE_KW dquat q_mul_dq(quat q, quat p, int f))
 /**
  * Quaternion addition (double precision).
  */
-FXP_DECLARATION(_FXP_INLINE_KW dquat dq_add(dquat q, dquat p))
+FXP_DECLARATION(dquat dq_add(dquat q, dquat p))
 {
 	dquat s;
 #define _QSUM(e) s.e = df_add(q.e, p.e)
@@ -173,7 +173,7 @@ FXP_DECLARATION(_FXP_INLINE_KW dquat dq_add(dquat q, dquat p))
 /**
  * Quaternion addition (single precision)
  */
-FXP_DECLARATION(_FXP_INLINE_KW quat q_add(quat q, quat p))
+FXP_DECLARATION(quat q_add(quat q, quat p))
 {
 	quat s;
 #define _QSUM(e) s.e = f_add(q.e, p.e)
@@ -193,7 +193,7 @@ FXP_DECLARATION(_FXP_INLINE_KW quat q_add(quat q, quat p))
  * Creates a purely imaginary quaternion V with vector part equal to v and
  * returns the vector part of q*(V*q')'.
  */
-FXP_DECLARATION(_FXP_INLINE_KW vec3 q_rot(quat q, vec3 v))
+FXP_DECLARATION(vec3 q_rot(quat q, vec3 v))
 {
 	quat _v;
 	frac _0 = {0};
@@ -211,7 +211,7 @@ FXP_DECLARATION(_FXP_INLINE_KW vec3 q_rot(quat q, vec3 v))
  * It only works for quaternions whose norm is already close to 1. It uses and
  * approximation for the norm (q_xnormerror).
  */
-FXP_DECLARATION(_FXP_INLINE_KW quat q_xrenorm(quat q))
+FXP_DECLARATION(quat q_xrenorm(quat q))
 {
 	frac err;
 	quat correction;
@@ -226,7 +226,7 @@ FXP_DECLARATION(_FXP_INLINE_KW quat q_xrenorm(quat q))
  *
  * See @ref q_xrenorm.
  */
-FXP_DECLARATION(_FXP_INLINE_KW dquat dq_xrenorm(dquat q))
+FXP_DECLARATION(dquat dq_xrenorm(dquat q))
 {
 	frac err;
 	dquat correction;
@@ -245,7 +245,7 @@ FXP_DECLARATION(_FXP_INLINE_KW dquat dq_xrenorm(dquat q))
  *
  * @return		A quaternion whose vector part is null except on one axis.
  */
-FXP_DECLARATION(_FXP_INLINE_KW quat q_udecompose(quat q, vec_axis axis))
+FXP_DECLARATION(quat q_udecompose(quat q, vec_axis axis))
 {
 	frac norm_err;
 	frac the_axis;
@@ -298,7 +298,7 @@ FXP_DECLARATION(_FXP_INLINE_KW quat q_udecompose(quat q, vec_axis axis))
  * The magnitude of this error reaches its maximum at 90 degrees and goes to
  * zero at 180 degrees.
  */
-FXP_DECLARATION(_FXP_INLINE_KW vec3 q_error(quat setp, quat pos))
+FXP_DECLARATION(vec3 q_error(quat setp, quat pos))
 {
 	quat c = q_mul(q_conj(pos), setp);
 
@@ -311,7 +311,7 @@ FXP_DECLARATION(_FXP_INLINE_KW vec3 q_error(quat setp, quat pos))
  * When the deviation is less than 90 degrees, it has a gain of approximately 2
  * over @ref q_error.
  */
-FXP_DECLARATION(_FXP_INLINE_KW vec3 q_error2(quat setp, quat pos))
+FXP_DECLARATION(vec3 q_error2(quat setp, quat pos))
 {
 	quat c = q_mul(q_conj(pos), setp);
 

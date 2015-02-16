@@ -8,6 +8,11 @@
  * Vector operations.
  */
 
+#define FXP_DECLARATION FXP_DECLARATION_C99_HEADER
+
+#include "fixed_point/fixed_point.h"
+
+#undef FXP_DECLARATION
 #define FXP_DECLARATION FXP_DECLARATION_C99_BODY
 
 #include "fixed_point/vector.h"
