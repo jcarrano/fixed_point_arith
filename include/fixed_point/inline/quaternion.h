@@ -3,8 +3,20 @@
  * @author	Juan I Carrano
  * @author	Andrés Calcabrini
  * @copyright	Copyright 2013 by Juan I Carrano, Andrés Calcabrini, Juan I. Ubeira and
- * 		Nicolás Venturo
- * @license	GNU General Public License, version 3.
+ * 		Nicolás Venturo. All rights reserved. \n
+ * 		\n
+ *		This program is free software: you can redistribute it and/or modify
+ *		it under the terms of the GNU General Public License as published by
+ *		the Free Software Foundation, either version 3 of the License, or
+ *		(at your option) any later version. \n
+ * 		\n
+ *		This program is distributed in the hope that it will be useful,
+ *		but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *		MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *		GNU General Public License for more details. \n
+ * 		\n
+ *		You should have received a copy of the GNU General Public License
+ *		along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * Quaternion inline definitions
  */
@@ -130,7 +142,7 @@ FXP_DECLARATION(quat q_mul(quat q, quat p))
  *
  * @return	(Q x P)/f
  */
-FXP_DECLARATION(dquat q_mul_dq(quat q, quat p, int f))
+FXP_DECLARATION(dquat q_mul_s_dq(quat q, quat p, int f))
 {
 	dquat s;
 
@@ -149,6 +161,34 @@ FXP_DECLARATION(dquat q_mul_dq(quat q, quat p, int f))
 	s.v.z = df_idiv( df_add(df_add(df_sub(
 		f_mul_df(p.r,q.v.z),f_mul_df(p.v.x,q.v.y)),
 		f_mul_df(p.v.y,q.v.x)),f_mul_df(p.v.z,q.r)), f);
+
+	return s;
+}
+
+/**
+ * Quaternion multiplication, return value is double precision.
+ *
+ * @return	(Q x P)/f
+ */
+FXP_DECLARATION(dquat q_mul_dq(quat q, quat p))
+{
+	dquat s;
+
+	s.r = df_sub(df_sub(df_sub(
+		f_mul_df(q.r,p.r),f_mul_df(q.v.x,p.v.x)),
+		f_mul_df(q.v.y,p.v.y)),f_mul_df(q.v.z,p.v.z));
+
+	s.v.x = df_add(df_sub(df_add(
+		f_mul_df(p.r,q.v.x),f_mul_df(p.v.x,q.r)),
+		f_mul_df(p.v.y,q.v.z)),f_mul_df(p.v.z,q.v.y));
+
+	s.v.y = df_sub(df_add(df_add(
+		f_mul_df(p.r,q.v.y),f_mul_df(p.v.x,q.v.z)),
+		f_mul_df(p.v.y,q.r)),f_mul_df(p.v.z,q.v.x));
+
+	s.v.z = df_add(df_add(df_sub(
+		f_mul_df(p.r,q.v.z),f_mul_df(p.v.x,q.v.y)),
+		f_mul_df(p.v.y,q.v.x)),f_mul_df(p.v.z,q.r));
 
 	return s;
 }
