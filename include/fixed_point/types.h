@@ -1,8 +1,21 @@
 /**
  * @file	types.h
  * @author	Juan I Carrano <juan@carrano.com.ar>
- * @copyright 	Copyright 2013 Juan I Carrano <juan@carrano.com.ar>
- * @license	GNU General Public License, version 3.
+ * @copyright 	Copyright 2013 Juan I Carrano <juan@carrano.com.ar>. All rights
+ *		reserved. \n
+ * 		\n
+ *		This program is free software: you can redistribute it and/or modify
+ *		it under the terms of the GNU General Public License as published by
+ *		the Free Software Foundation, either version 3 of the License, or
+ *		(at your option) any later version. \n
+ * 		\n
+ *		This program is distributed in the hope that it will be useful,
+ *		but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *		MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *		GNU General Public License for more details. \n
+ * 		\n
+ *		You should have received a copy of the GNU General Public License
+ *		along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @brief Type definitions for fixed point arithmetic types.
  */
@@ -73,6 +86,33 @@ typedef struct {
 typedef struct {
 	efrac_base v;
 } efrac;
+
+/**
+ * Make a dfrac from its base value.
+ */
+static inline frac _frac(frac_base v)
+{
+	frac r = {v};
+	return r;
+}
+
+/**
+ * Make a dfrac from its base value.
+ */
+static inline dfrac _dfrac(dfrac_base v)
+{
+	dfrac r = {v};
+	return r;
+}
+
+/**
+ * Make a efrac from its base value.
+ */
+static inline efrac _efrac(efrac_base v)
+{
+	efrac r = {v};
+	return r;
+}
 
 #define FRAC_BIT (16)	/*!< Size in bits of a FRAC. */
 #define DFRAC_BIT (32)	/*!< Size in bits of a DFRAC. */
@@ -194,7 +234,7 @@ static const efrac EFZero = {0};
  *
  * @return 	The number cast as a real_type.
  */
-#define F_TO_REAL(real_type, n) (((real_type)(n))/(-(real_type)FRAC_minus1))
+#define F_TO_REAL(real_type, n) (((real_type)(n.v))/(-(real_type)FRAC_minus1_V))
 
 /**
  * Convert a floating point / native number to @ref frac.
@@ -205,14 +245,14 @@ static const efrac EFZero = {0};
  *
  * @bug		Does not round before converting.
  */
-#define REAL_TO_F(f) ((frac)(-f*FRAC_minus1))
+#define REAL_TO_F(f) (_frac(-f*FRAC_minus1_V))
 
 /**
  * Convert a @ref dfrac to a floating point / native format.
  *
  * @see	F_TO_REAL
  */
-#define DF_TO_REAL(real_type, n) (((real_type)(n))/((real_type)DFRAC_1))
+#define DF_TO_REAL(real_type, n) (((real_type)(n.v))/((real_type)DFRAC_1_V))
 
 /**
  * Convert a floating point / native number to @ref dfrac.
@@ -221,14 +261,14 @@ static const efrac EFZero = {0};
  *
  * @bug		Does not round before converting.
  */
-#define REAL_TO_DF(f) ((dfrac)(f*DFRAC_1))
+#define REAL_TO_DF(f) (_dfrac(f*DFRAC_1_V))
 
 /**
  * Convert a @ref efrac to a floating point / native format.
  *
  * @see F_TO_REAL
  */
-#define EF_TO_REAL(real_type, n) (((real_type)(n))/((real_type)EFRAC_1))
+#define EF_TO_REAL(real_type, n) (((real_type)(n.v))/((real_type)EFRAC_1_V))
 
 /**
  * Convert a floating point / native number to @ref efrac.
@@ -237,7 +277,7 @@ static const efrac EFZero = {0};
  *
  * @bug		Does not round before converting.
  */
-#define REAL_TO_EF(f) ((efrac)(f*EFRAC_1))
+#define REAL_TO_EF(f) (_efrac(f*EFRAC_1_V))
 
 #define F_TO_DOUBLE(n) F_TO_REAL(double, n) /*!< Convert a @ref frac to double.*/
 #define DF_TO_DOUBLE(n) DF_TO_REAL(double, n)/*!< Convert a @ref dfrac to double.*/
