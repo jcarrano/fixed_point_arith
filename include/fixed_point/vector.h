@@ -41,18 +41,29 @@
  * Macro to create functions with element by element operations between vectors.
  *
  * @param	name	Name of the function to be defined.
- * @param	type	Type of arguments and return value.
+ * @param	typeR	Type of return value.
+ * @param	typeA	Type of first argument.
+ * @param	typeB	Type of second argument.
  * @param	f	Name of the function to be applied.
  */
-#define MAKE_VEC_VEC_F(name, type, f) \
-FXP_DECLARATION(_FXP_INLINE_KW type name(type a, type b)) \
+#define MAKE_VEC_VEC_F3(name, typeR, typeA, typeB, f) \
+FXP_DECLARATION(_FXP_INLINE_KW typeR name(typeA a, typeB b)) \
 { \
-	type r; \
+	typeR r; \
 	r.x = f(a.x, b.x); \
 	r.y = f(a.y, b.y); \
 	r.z = f(a.z, b.z); \
 	return r; \
 }
+
+/**
+ * Macro to create functions with element by element operations between vectors.
+ *
+ * @param	name	Name of the function to be defined.
+ * @param	type	Type of arguments and return value.
+ * @param	f	Name of the function to be applied.
+ */
+#define MAKE_VEC_VEC_F(name, type, f) MAKE_VEC_VEC_F3(name, type, type, type, f)
 
 /**
  * Macro to create functions with function-operations between vectors and scalars

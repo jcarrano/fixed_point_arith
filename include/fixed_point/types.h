@@ -47,9 +47,21 @@
  * should not do that and use a double-length accumulator instead.
  */
 
+typedef int16_t mfrac_base;	/*!< Base arithmetic type for @ref mfrac.*/
 typedef int16_t frac_base;	/*!< Base arithmetic type for @ref frac.*/
 typedef int32_t dfrac_base;	/*!< Base arithmetic type for @ref dfrac.*/
 typedef int32_t efrac_base;	/*!< Base arithmetic type for @ref efrac.*/
+
+/**
+ * 16 bit fractional number in Q8.8 format.
+ *
+ * Values of this type can represent numbers between -128 and (2**7 - 2**-8), or
+ * approximately 127.996 with a precision of 2**-8 (about 0.0039 or 2.4 decimal
+ * places).
+ */
+typedef struct {
+	mfrac_base v;
+} mfrac;
 
 /**
  * 16 bit fractional number in Q1.15 format.
@@ -114,6 +126,7 @@ static inline efrac _efrac(efrac_base v)
 	return r;
 }
 
+#define MFRAC_BIT (16)	/*!< Size in bits of a FRAC. */
 #define FRAC_BIT (16)	/*!< Size in bits of a FRAC. */
 #define DFRAC_BIT (32)	/*!< Size in bits of a DFRAC. */
 #define EFRAC_BIT (32)	/*!< Size in bits of an EFRAC. */
@@ -138,6 +151,30 @@ typedef dfrac frac_s32;	/*!< 32 bit signed fractional */
  */
 
 /**
+ * @defgroup mfrac_limits MFRAC Limits
+ * @{
+ */
+
+/**
+ * mfrac representing 1.
+ */
+#define MFRAC_1_V (INT16_MAX >> 8)
+
+/**
+ * mfrac representing -1.
+ */
+#define MFRAC_minus1_V (INT16_MIN >> 8)
+
+/** Maximum (most positive) value for a frac.
+ * Represents the value 1**7 - 2**(-8) or "almost 128" */
+#define MFRAC_MAX_V INT16_MAX
+
+/** Minimum (most negative) value for a frac.
+ * Represents the value -128 */
+#define MFRAC_MIN_V INT16_MIN
+
+/** @}
+ *
  * @defgroup frac_limits FRAC Limits
  * @{
  */
