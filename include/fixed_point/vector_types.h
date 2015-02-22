@@ -31,6 +31,15 @@
  */
 
 /**
+ * Mixed integer/fractional 3D vector.
+ *
+ * Components are represented by values of type @ref mfrac .
+ */
+typedef struct {
+	mfrac x,y,z;
+} mvec3;
+
+/**
  * Single precision 3D vector.
  *
  * Components are represented by values of type @ref frac .
@@ -60,6 +69,7 @@ typedef struct {
 /** Literal for the  Zero vector */
 #define VEC0 {{0},{0},{0}}
 
+static const mvec3 mvec3_Zero = VEC0;	/*!< Constant for the zero vector */
 static const vec3 vec3_Zero = VEC0;	/*!< Constant for the zero vector */
 static const dvec3 dvec3_Zero = VEC0;	/*!< Constant for the zero vector */
 static const evec3 evec3_Zero = VEC0;	/*!< Constant for the zero vector */

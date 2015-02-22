@@ -211,6 +211,20 @@ FXP_DECLARATION(dfrac f_mul_df(frac a, frac b))
 }
 
 /**
+ * Multiply single precision by mixed fractional, yield extended precision,
+ *
+ * 1.15 x 8.8 => 17.15
+ *
+ * @param	a,b	Operands
+ * @return		a*b
+ */
+FXP_DECLARATION(efrac f_mf_mul_ef(frac a, mfrac b))
+{
+	efrac r = {(((efrac_base)a.v) * b.v)>>8};
+	return r;
+}
+
+/**
  * Multiply single precision by integer, yield single precision.
  *
  * 1.15 x 16.0 => 1.15.
