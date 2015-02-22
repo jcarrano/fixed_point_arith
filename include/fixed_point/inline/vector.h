@@ -96,6 +96,11 @@ MAKE_VEC_SCALAR_F(dv_shiftl, dvec3, int8_t, df_shiftl)
 MAKE_VEC_SCALAR_F(dv_shiftr, dvec3, int8_t, df_shiftr)
 
 /**
+ * Clip components between -b and b.
+ */
+MAKE_VEC_SCALAR_F(v_clip, vec3, frac, f_clip)
+
+/**
  * Multiply single precicion vector by integer, yield extended precision vector.
  */
 MAKE_VEC_SCALAR_F2(v_imul_ev, evec3, vec3, int, f_imul_ef)
