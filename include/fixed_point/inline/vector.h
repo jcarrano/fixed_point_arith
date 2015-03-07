@@ -40,6 +40,16 @@ MAKE_VEC_VEC_F(v_add, vec3, f_add)
 MAKE_VEC_VEC_F(v_sub, vec3, f_sub)
 
 /**
+ * Add two extended precision vectors.
+ */
+MAKE_VEC_VEC_F(ev_add, evec3, ef_add)
+
+/**
+ * Substract two extended precision vectors.
+ */
+MAKE_VEC_VEC_F(ev_sub, evec3, ef_sub)
+
+/**
  * Add two double precision vectors.
  */
 MAKE_VEC_VEC_F(dv_add, dvec3, df_add)
@@ -84,6 +94,11 @@ MAKE_VEC_SCALAR_F(v_idiv, vec3, int16_t, f_idiv)
  * Divide double precision vector by integer having the same width as frac.
  */
 MAKE_VEC_SCALAR_F(dv_idiv, dvec3, int16_t, df_idiv)
+
+/**
+ * Divide extended precision vector by integer having the same width as frac.
+ */
+MAKE_VEC_SCALAR_F(ev_idiv, evec3, int16_t, ef_idiv)
 
 /**
  * Arithmetic shift components left.
@@ -147,6 +162,7 @@ MAKE_VEC_ELEM_F(v_to_dv, dvec3, vec3, f_to_df)
  * @bug		Does not perform convergent rounding.
  */
 MAKE_VEC_ELEM_F(dv_to_v, vec3, dvec3, df_to_f)
+
 
 /** @}
  */
