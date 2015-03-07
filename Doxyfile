@@ -1998,7 +1998,8 @@ EXPAND_AS_DEFINED      = MAKE_VEC_OP \
                          FXP_VALUE_OP \
                          FXP_DECLARATION_C99_HEADER \
                          FXP_DECLARATION_C99_BODY \
-                         FXP_DECLARATION
+                         FXP_DECLARATION \
+                         MAKE_VEC_VEC_F3
 
 # If the SKIP_FUNCTION_MACROS tag is set to YES then doxygen's preprocessor will
 # remove all refrences to function-like macros that are alone on a line, have an
