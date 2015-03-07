@@ -159,6 +159,13 @@ FXP_OP3(ef_add, efrac, +)
 /** Substract two extended precision fractional numbers - may overflow. */
 FXP_OP3(ef_sub, efrac, -)
 
+/** Add a single precision fractional to an extended precision fractional. */
+FXP_DECLARATION(efrac ef_f_add(efrac a, frac b))
+{
+	a.v += b.v
+	return a;
+}
+
 /** Negate single precision fractional */
 FXP_DECLARATION(frac f_neg(frac a))
 {
