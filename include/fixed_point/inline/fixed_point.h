@@ -162,7 +162,7 @@ FXP_OP3(ef_sub, efrac, -)
 /** Add a single precision fractional to an extended precision fractional. */
 FXP_DECLARATION(efrac ef_f_add(efrac a, frac b))
 {
-	a.v += b.v
+	a.v += b.v;
 	return a;
 }
 
