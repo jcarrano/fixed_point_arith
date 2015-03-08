@@ -239,7 +239,7 @@ typedef dfrac frac_s32;	/*!< 32 bit signed fractional */
  * @{
  */
 
-#define EFRAC_minus1_V ((efrac)FRAC_minus1_V)
+#define EFRAC_minus1_V ((efrac_base)FRAC_minus1_V)
 #define EFRAC_1_V (-EFRAC_minus1_V)
 
 #define EFRAC_MAX_V INT32_MAX
