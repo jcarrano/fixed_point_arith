@@ -247,6 +247,20 @@ FXP_DECLARATION(frac f_imul(frac a, int16_t b))
 }
 
 /**
+ * Multiply single precision by integer, yield integer.
+ *
+ * 1.15 x 16.0 => 16.0.
+ *
+ * @param	a	Operands, fractional.
+ * @param	b	Operand, integer.
+ * @return		a*b
+ */
+FXP_DECLARATION(int f_imul_i(frac a, int b))
+{
+	return (((int64_t)b)*a.v) >> 15;
+}
+
+/**
  * Multiply single precision by integer, yield extended precision.
  *
  * 1.15 x 16.0 => 17.15.
