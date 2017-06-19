@@ -9,6 +9,7 @@ This library implements fixed point arithmetic in C, along with vectors and
 quaternions. The format for fixed point is the "Q format". 
 
 Check out the Doxyren reference at https://jcarrano.github.io/fixed_point_arith/
+
 Acknowledgements
 ----------------
 
