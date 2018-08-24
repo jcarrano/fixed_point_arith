@@ -1,0 +1,16 @@
+*~
+*.pyc
+*.o
+*.la
+*.lo
+*.gch
+a.out
+*.pfd
+*.elf
+*.test
+*.pdf
+.libs
+*.a
+docs/html
+docs/latex
+docs/xml
