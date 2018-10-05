@@ -33,7 +33,11 @@
 #include "common.h"
 #include "types.h"
 
-/** @defgroup fxp_fmacros	Function-generating macros
+/**
+ * @addtogroup fxp_arith
+ * @{
+ *
+ * @defgroup fxp_fmacros	Function-generating macros
  * @{
  */
 
@@ -117,6 +121,7 @@ FXP_DECLARATION(typeR name(typeA a, typeB b)) \
 #define F_SIGN(a) (((a).v >= 0)? 1 : -1)
 
 /** @}
+ * @}
  */
 
 #ifdef FXP_C99_INLINE

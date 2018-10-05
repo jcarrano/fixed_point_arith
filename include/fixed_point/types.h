@@ -33,7 +33,7 @@
  */
 #include <stdint.h>
 
-/** ********************************************************************** *
+/**
  * @defgroup fxp_class Fixed point numbers
  * @{
  *
@@ -184,7 +184,7 @@ typedef dfrac frac_s32;	/*!< 32 bit signed fractional */
  *
  * "Almost 1". Since fracs lie in the range [-1, 1), the number 1 does not have
  * a representation. FRAC_1 is the number closest to one, that is,
- * ```1 - 2**(-15)``` */
+ * `1 - 2**(-15)` */
 #define FRAC_1_V INT16_MAX
 
 /** frac representing 0.5 */
