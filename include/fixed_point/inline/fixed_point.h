@@ -167,6 +167,13 @@ FXP_DECLARATION(efrac ef_f_add(efrac a, frac b))
 }
 
 /** Negate single precision fractional */
+/*@
+  requires frac_r(a) ≢ -1;
+
+  assigns \nothing;
+
+  ensures frac_r(\result) ≡ -frac_r(a);
+ */
 FXP_DECLARATION(frac f_neg(frac a))
 {
 	frac r = {-a.v};
@@ -174,6 +181,13 @@ FXP_DECLARATION(frac f_neg(frac a))
 }
 
 /** Negate double precision fractional */
+/*@
+  requires frac_r(a) ≢ -2;
+
+  assigns \nothing;
+
+  ensures frac_r(\result) ≡ -frac_r(a);
+ */
 FXP_DECLARATION(dfrac df_neg(dfrac a))
 {
 	dfrac r = {-a.v};
@@ -181,6 +195,13 @@ FXP_DECLARATION(dfrac df_neg(dfrac a))
 }
 
 /** Negate extended precision fractional */
+/*@
+  requires frac_r(a) ≢ efrac_minv;
+
+  assigns \nothing;
+
+  ensures frac_r(\result) ≡ -frac_r(a);
+ */
 FXP_DECLARATION(efrac ef_neg(efrac a))
 {
 	efrac r = {-a.v};
@@ -211,6 +232,11 @@ FXP_DECLARATION(frac f_mul(frac a, frac b))
  * @param	a,b	Operands
  * @return		a*b
  */
+/*@
+  assigns \nothing;
+
+  ensures frac_r(\result) ≡ frac_r(a)*frac_r(b);
+ */
 FXP_DECLARATION(dfrac f_mul_df(frac a, frac b))
 {
 	dfrac r = {(((dfrac_base)a.v) * b.v)};
@@ -224,6 +250,7 @@ FXP_DECLARATION(dfrac f_mul_df(frac a, frac b))
  *
  * @param	a,b	Operands
  * @return		a*b
+ * @bug		Does not perform convergent rounding.
  */
 FXP_DECLARATION(efrac f_mf_mul_ef(frac a, mfrac b))
 {
@@ -268,6 +295,11 @@ FXP_DECLARATION(int f_imul_i(frac a, int b))
  * @param	a	Operands, fractional.
  * @param	b	Operand, integer.
  * @return		a*b
+ */
+/*@
+  assigns \nothing;
+
+  ensures frac_r(\result) ≡ frac_r(a)*b;
  */
 FXP_DECLARATION(efrac f_imul_ef(frac a, int16_t b))
 {

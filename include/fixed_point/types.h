@@ -131,6 +131,7 @@ static inline efrac _efrac(efrac_base v)
 #define DFRAC_BIT (32)	/*!< Size in bits of a DFRAC. */
 #define EFRAC_BIT (32)	/*!< Size in bits of an EFRAC. */
 
+
 /**
  * @addtogroup fxp_width
  * Width based type names.
@@ -233,6 +234,7 @@ typedef dfrac frac_s32;	/*!< 32 bit signed fractional */
  * Represents the value -2 */
 #define DFRAC_MIN_V INT32_MIN
 
+
 /** @}
  *
  * @defgroup efrac_limits EFRAC Limits.
@@ -246,7 +248,37 @@ typedef dfrac frac_s32;	/*!< 32 bit signed fractional */
 #define EFRAC_MIN_V INT32_MIN
 
 /** @}
- *
+ */
+
+#define _FXP_FRAMA_EXPOSE(type, val) static const type _c##val = val;
+/* FIXME: this is not being very useful. */
+_FXP_FRAMA_EXPOSE(frac_base, FRAC_1_V)
+_FXP_FRAMA_EXPOSE(frac_base, FRAC_minus1_V)
+
+_FXP_FRAMA_EXPOSE(dfrac_base, DFRAC_1_V)
+_FXP_FRAMA_EXPOSE(mfrac_base, MFRAC_1_V)
+_FXP_FRAMA_EXPOSE(efrac_base, EFRAC_1_V)
+_FXP_FRAMA_EXPOSE(efrac_base, EFRAC_MIN_V)
+
+
+/* Logic declarations to convert fractionals to reals. */
+/*@
+  // There seems to be some weird things going on relating to constants that
+  // does not allow us to use them, so we have to hardcode stuff.
+  // This is not all that bad, since fractional types have well-defined bit
+  // widths, which are part of the API and will not change.
+
+  // TODO: add assertions to ensure these values are consistent with the
+  // defines.
+  logic ℝ frac_r(frac x) = x.v / 32768.0; // 2**15
+  logic ℝ frac_r(dfrac x) = x.v / 1073741824.0; // 2**30
+  logic ℝ frac_r(mfrac x) = x.v / 256.0; // 2**8
+  logic ℝ frac_r(efrac x) = x.v / 32768.0; // 2**15
+
+  logic ℝ efrac_minv = -65536.0;
+ */
+
+/**
  * @defgroup frac_const FRAC Constants
  * @{
  */
