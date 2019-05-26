@@ -1,4 +1,3 @@
-syntax: glob
 *~
 *.pyc
 *.o
@@ -13,7 +12,6 @@ a.out
 .libs
 *.a
 
-syntax: regexp
-.*\#.*\#$
-^doc/latex/.+
-^doc/html/.+
+/build/
+/doc/latex/
+/doc/html/
