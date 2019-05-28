@@ -169,6 +169,7 @@ typedef dfrac frac_s32;	/*!< 32 bit signed fractional */
 /** Maximum (most positive) value for a frac.
  * Represents the value 1**7 - 2**(-8) or "almost 128" */
 #define MFRAC_MAX_V INT16_MAX
+#define MFRAC_MAX_V INT16_MAX
 
 /** Minimum (most negative) value for a frac.
  * Represents the value -128 */
@@ -182,6 +183,8 @@ typedef dfrac frac_s32;	/*!< 32 bit signed fractional */
 
 /**
  * Greatest value for the frac type.
+ *
+ * @bug	Rename this to "almost1"
  *
  * "Almost 1". Since fracs lie in the range [-1, 1), the number 1 does not have
  * a representation. FRAC_1 is the number closest to one, that is,
@@ -250,32 +253,88 @@ typedef dfrac frac_s32;	/*!< 32 bit signed fractional */
 /** @}
  */
 
-#define _FXP_FRAMA_EXPOSE(type, val) static const type _c##val = val;
-/* FIXME: this is not being very useful. */
-_FXP_FRAMA_EXPOSE(frac_base, FRAC_1_V)
-_FXP_FRAMA_EXPOSE(frac_base, FRAC_minus1_V)
 
-_FXP_FRAMA_EXPOSE(dfrac_base, DFRAC_1_V)
-_FXP_FRAMA_EXPOSE(mfrac_base, MFRAC_1_V)
-_FXP_FRAMA_EXPOSE(efrac_base, EFRAC_1_V)
-_FXP_FRAMA_EXPOSE(efrac_base, EFRAC_MIN_V)
+#ifdef __FRAMAC__
 
+/* By putting the logic definitions in the same conditional compilation block
+ * as the dummy function used to assert them we ensure that this block makes
+ * it into FRAMA-C or else everything will fail.
+ */
 
-/* Logic declarations to convert fractionals to reals. */
 /*@
   // There seems to be some weird things going on relating to constants that
   // does not allow us to use them, so we have to hardcode stuff.
   // This is not all that bad, since fractional types have well-defined bit
   // widths, which are part of the API and will not change.
 
+  logic ℝ frac_minus1v = -32768.0;	// 2**15
+  logic ℝ dfrac_1v = 1073741824.0;      // 2**30
+  logic ℝ efrac_1v = -frac_minus1v;     // 2**8
+  logic ℝ mfrac_1v = 128.0;             // 2**15
+
+  logic ℝ frac_minv = frac_minus1v;
+  logic ℝ dfrac_minv = -1.0 * (1 << 31);
+  logic ℝ efrac_minv = dfrac_minv;
+  logic ℝ mfrac_minv = frac_minv;
+
+  logic ℝ frac_maxv =  -frac_minv - 1;
+  logic ℝ dfrac_maxv = -dfrac_minv - 1;
+  logic ℝ efrac_maxv = -efrac_minv - 1;
+  logic ℝ mfrac_maxv = -mfrac_minv - 1;
+
+*/
+
+#define _FXP_FRAMA_EXPOSE3(type, X, Y, Z) type \
+	_c##X = X, _c##Y = Y, _c##Z = Z;
+
+/* Check that the constansts are right. This is suboptimal as we could be
+ * forgetting one, but it is what it is.
+ * We don't need to verify everything, only the stuff we use in the logic
+ * specifications, and if logic specifications are well written, we should
+ * not use much more than the bounds.
+ * */
+/*@
+  assigns \nothing;
+ */
+static void _fxp_frama_assertions()
+{
+   _FXP_FRAMA_EXPOSE3(frac_base, FRAC_MAX_V, FRAC_MIN_V, FRAC_minus1_V)
+
+   _FXP_FRAMA_EXPOSE3(dfrac_base, DFRAC_MAX_V , DFRAC_MIN_V , DFRAC_1_V)
+
+   _FXP_FRAMA_EXPOSE3(mfrac_base, MFRAC_MAX_V , MFRAC_MIN_V, MFRAC_1_V)
+
+   _FXP_FRAMA_EXPOSE3(efrac_base, EFRAC_MAX_V, EFRAC_MIN_V, EFRAC_1_V)
+
+   /*@ assert Fmin: frac_minv    ≡ _cFRAC_MIN_V;      */
+   /*@ assert F1:   frac_minus1v ≡ _cFRAC_minus1_V;   */
+   /*@ assert FMax: frac_maxv    ≡ _cFRAC_MAX_V;      */
+
+   /*@ assert Dmin: dfrac_minv ≡ _cDFRAC_MIN_V;       */
+   /*@ assert D1:   dfrac_1v   ≡ _cDFRAC_1_V;         */
+   /*@ assert DMax: dfrac_maxv ≡ _cDFRAC_MAX_V;       */
+
+   /*@ assert Emin: efrac_minv ≡ _cEFRAC_MIN_V;       */
+   /*@ assert E1:   efrac_1v   ≡ _cEFRAC_1_V;         */
+   /*@ assert EMax: efrac_maxv ≡ _cEFRAC_MAX_V;       */
+
+   /*@ assert Mmin: mfrac_minv ≡ _cMFRAC_MIN_V;       */
+   /*@ assert M1:   mfrac_1v   ≡ _cMFRAC_1_V;         */
+   /*@ assert MMax: mfrac_maxv ≡ _cMFRAC_MAX_V;	*/
+}
+
+#endif /* __FRAMAC__ */
+
+/* Logic declarations to convert fractionals to reals. */
+/*@
+
   // TODO: add assertions to ensure these values are consistent with the
   // defines.
-  logic ℝ frac_r(frac x) = x.v / 32768.0; // 2**15
-  logic ℝ frac_r(dfrac x) = x.v / 1073741824.0; // 2**30
-  logic ℝ frac_r(mfrac x) = x.v / 256.0; // 2**8
-  logic ℝ frac_r(efrac x) = x.v / 32768.0; // 2**15
+  logic ℝ frac_r(frac x) = x.v / -frac_minus1v;
+  logic ℝ frac_r(dfrac x) = x.v / dfrac_1v;
+  logic ℝ frac_r(mfrac x) = x.v / mfrac_1v;
+  logic ℝ frac_r(efrac x) = x.v / efrac_1v;
 
-  logic ℝ efrac_minv = -65536.0;
  */
 
 /**
