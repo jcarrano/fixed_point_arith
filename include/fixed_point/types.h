@@ -159,7 +159,7 @@ typedef dfrac frac_s32;	/*!< 32 bit signed fractional */
 /**
  * mfrac representing 1.
  */
-#define MFRAC_1_V (INT16_MAX >> 8)
+#define MFRAC_1_V (-(INT16_MIN >> 8))
 
 /**
  * mfrac representing -1.
