@@ -31,6 +31,8 @@ FRAMA_REPORT_FLAGS ?= -report-unclassified-unknown ERROR -report-classify -repor
 
 # #### Tool config ######
 
+DOXYGEN ?= doxygen
+
 # archiver
 ifeq (${THIN_ARCHIVE}, true)
 ARFLAGS = rcTs
@@ -156,7 +158,8 @@ directories: | $(NEEDED_DIRS)
 depclean: $(foreach dfile,$(D_FILES),$(dfile)-clean)
 
 .PHONY: clean
-clean: $(foreach f,$(O_FILES) $(GCH_FILES) $(PROOF_FILES),$(f)-clean)
+clean: $(foreach f,$(O_FILES) $(GCH_FILES) $(PROOF_FILES),$(f)-clean) \
+       docs-dirclean
 
 .PHONY: allclean
 allclean: clean depclean
@@ -203,6 +206,11 @@ $(OUT_FILE).a: $(NEEDED_OBJECTS) | directories
 
 $(OUT_DIR)/%.o: | directories
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+
+# ################## Documentation ######################################### #
+
+docs: Doxyfile $(C_FILES) $(H_FILES)
+	$(DOXYGEN) $< && touch $@
 
 # ################## Proving stuff ########################################## #
 
