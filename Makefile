@@ -45,7 +45,7 @@ CPPFLAGS += $(IPATH) -DFXP_C99_INLINE
 # compiler
 WFLAGS ?= -pedantic -Wall -Wextra
 
-CFLAGS += -std=c99 -ffunction-sections -fdata-sections
+CFLAGS += $(WFLAGS) -std=c99 -ffunction-sections -fdata-sections
 
 # Important when creating a shared library only
 # CFLAGS += -fPIC
