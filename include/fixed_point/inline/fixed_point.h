@@ -424,8 +424,10 @@ FXP_DECLARATION(frac df_to_f(dfrac x))
  * @return		x as a double precision fractional
  */
 FXP_DECLARATION(dfrac f_to_df(frac x))
-{ /* 1.15 -> 2.30 */
-	dfrac r = { ((dfrac_base)x.v)<<(FRAC_BIT - 1) };
+{
+	/* Shift left a signed number is UB. Instead we multiply by (1<<bits).
+	 * Any smart compiler will replace it by a shift anyways. */
+	dfrac r = { ((dfrac_base)x.v)*(1<<(FRAC_BIT - 1)) };
 	return r;
 }
 
