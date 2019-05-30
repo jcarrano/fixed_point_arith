@@ -562,6 +562,14 @@ FXP_DECLARATION(frac ef_to_f(efrac x))
  *
  * @return		min(max(x, -limit), limit)
  */
+/*@
+  requires frac_r(limit) >= 0;
+
+  assigns \nothing;
+
+  ensures \let l = frac_r(limit);
+		frac_r(\result) == fxp_clip(frac_r(x), -l, l);
+ */
 FXP_DECLARATION(frac f_clip (frac x, frac limit))
 {
 
