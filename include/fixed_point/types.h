@@ -327,14 +327,32 @@ static void _fxp_frama_assertions()
 
 /* Logic declarations to convert fractionals to reals. */
 /*@
+  logic ℝ  frac_of_v(ℝ x) = x / -frac_minus1v;
+  logic ℝ dfrac_of_v(ℝ x) = x / dfrac_1v;
+  logic ℝ mfrac_of_v(ℝ x) = x / mfrac_1v;
+  logic ℝ efrac_of_v(ℝ x) = x / efrac_1v;
 
-  // TODO: add assertions to ensure these values are consistent with the
-  // defines.
-  logic ℝ frac_r(frac x) = x.v / -frac_minus1v;
-  logic ℝ frac_r(dfrac x) = x.v / dfrac_1v;
-  logic ℝ frac_r(mfrac x) = x.v / mfrac_1v;
-  logic ℝ frac_r(efrac x) = x.v / efrac_1v;
+  logic ℝ frac_r(frac x)  =  frac_of_v(x.v);
+  logic ℝ frac_r(dfrac x) = dfrac_of_v(x.v);
+  logic ℝ frac_r(mfrac x) = mfrac_of_v(x.v);
+  logic ℝ frac_r(efrac x) = efrac_of_v(x.v);
 
+  logic ℝ  frac_eps =  frac_of_v(1);
+  logic ℝ dfrac_eps = dfrac_of_v(1);
+  logic ℝ mfrac_eps = mfrac_of_v(1);
+  logic ℝ efrac_eps = efrac_of_v(1);
+
+  logic ℝ  frac_max =  frac_of_v(frac_maxv);
+  logic ℝ dfrac_max = dfrac_of_v(dfrac_maxv);
+  logic ℝ mfrac_max = mfrac_of_v(mfrac_maxv);
+  logic ℝ efrac_max = efrac_of_v(efrac_maxv);
+
+  logic ℝ  frac_min =  frac_of_v( frac_minv);
+  logic ℝ dfrac_min = dfrac_of_v(dfrac_minv);
+  logic ℝ mfrac_min = mfrac_of_v(mfrac_minv);
+  logic ℝ efrac_min = efrac_of_v(efrac_minv);
+
+  logic ℝ fxp_clip(ℝ x, ℝ min, ℝ max) = \min(\max(x, min), max);
  */
 
 /**
