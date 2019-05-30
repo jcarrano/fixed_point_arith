@@ -52,6 +52,11 @@
  *
  * @return 	True if a > b
  */
+/*@
+  assigns \nothing;
+
+  ensures frac_r(a) > frac_r(b) <==> \result != 0;
+ */
 FXP_SCMP(f_gt, >)
 
 /**
@@ -60,6 +65,11 @@ FXP_SCMP(f_gt, >)
  * @param	a, b	Operands
  *
  * @return 	True if a >= b
+ */
+/*@
+  assigns \nothing;
+
+  ensures frac_r(a) >= frac_r(b) <==> \result != 0;
  */
 FXP_SCMP(f_ge, >=)
 
@@ -70,6 +80,11 @@ FXP_SCMP(f_ge, >=)
  *
  * @return 	True if a < b
  */
+/*@
+  assigns \nothing;
+
+  ensures frac_r(a) < frac_r(b) <==> \result != 0;
+ */
 FXP_SCMP(f_lt, <)
 
 /**
@@ -78,6 +93,11 @@ FXP_SCMP(f_lt, <)
  * @param	a, b	Operands
  *
  * @return 	True if a <= b
+ */
+/*@
+  assigns \nothing;
+
+  ensures frac_r(a) <= frac_r(b) <==> \result != 0;
  */
 FXP_SCMP(f_le, <=)
 
@@ -88,6 +108,11 @@ FXP_SCMP(f_le, <=)
  *
  * @return 	True if a == b
  */
+/*@
+  assigns \nothing;
+
+  ensures frac_r(a) == frac_r(b) <==> \result != 0;
+ */
 FXP_SCMP(f_eq, ==)
 
 /**
@@ -96,6 +121,11 @@ FXP_SCMP(f_eq, ==)
  * @param	a, b	Operands
  *
  * @return 	True if a > b
+ */
+/*@
+  assigns \nothing;
+
+  ensures frac_r(a) > frac_r(b) <==> \result != 0;
  */
 FXP_DCMP(df_gt, >)
 
@@ -106,6 +136,11 @@ FXP_DCMP(df_gt, >)
  *
  * @return 	True if a >= b
  */
+/*@
+  assigns \nothing;
+
+  ensures frac_r(a) >= frac_r(b) <==> \result != 0;
+ */
 FXP_DCMP(df_ge, >=)
 
 /**
@@ -114,6 +149,11 @@ FXP_DCMP(df_ge, >=)
  * @param	a, b	Operands
  *
  * @return 	True if a < b
+ */
+/*@
+  assigns \nothing;
+
+  ensures frac_r(a) < frac_r(b) <==> \result != 0;
  */
 FXP_DCMP(df_lt, <)
 
@@ -124,6 +164,11 @@ FXP_DCMP(df_lt, <)
  *
  * @return 	True if a <= b
  */
+/*@
+  assigns \nothing;
+
+  ensures frac_r(a) <= frac_r(b) <==> \result != 0;
+ */
 FXP_DCMP(df_le, <=)
 
 /**
@@ -132,6 +177,11 @@ FXP_DCMP(df_le, <=)
  * @param	a, b	Operands
  *
  * @return 	True if a == b
+ */
+/*@
+  assigns \nothing;
+
+  ensures frac_r(a) == frac_r(b) <==> \result != 0;
  */
 FXP_DCMP(df_eq, ==)
 
