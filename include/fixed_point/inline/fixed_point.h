@@ -488,17 +488,31 @@ FXP_DECLARATION(frac df_to_f(dfrac x))
 /**
  * Extend a single precision number to double precision.
  *
+ * 1.15 -> 2.30
+ *
  * @param	x	Single precision fractional
  * @return		x as a double precision fractional
  */
+/*@
+  assigns \nothing;
+
+  ensures frac_r(\result) == frac_r(x);
+ */
 FXP_DECLARATION(dfrac f_to_df(frac x))
-{ /* 1.15 -> 2.30 */
-	dfrac r = { ((dfrac_base)x.v)<<(FRAC_BIT - 1) };
+{
+	/* Shift left a signed number is UB. Instead we multiply by (1<<bits).
+	 * Any smart compiler will replace it by a shift anyways. */
+	dfrac r = { ((dfrac_base)x.v)*(1<<(FRAC_BIT - 1)) };
 	return r;
 }
 
 /**
  * Extend a single precision fractional to an extended-fractional
+ */
+/*@
+  assigns \nothing;
+
+  ensures frac_r(\result) == frac_r(x);
  */
 FXP_DECLARATION(efrac f_to_ef(frac x))
 {
@@ -524,6 +538,11 @@ FXP_DECLARATION(efrac f_ef_div(frac dividend, efrac divisor))
  * Saturate an extended fractional to yield a fractional
  *
  * Note that the precision of efracs and fracs is the same.
+ */
+/*@
+  assigns \nothing;
+
+  ensures frac_r(\result) == \min(\max(frac_r(x), frac_min), frac_max);
  */
 FXP_DECLARATION(frac ef_to_f(efrac x))
 {
