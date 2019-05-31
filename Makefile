@@ -135,7 +135,7 @@ NEEDED_DIRS = $(OUT_DIR) $(call transform,$(SRC_DIRECTORIES),,)
 
 .PHONY: all library proofs
 
-all: proofs library
+all: library
 
 library: $(OUT_FILE).a $(OUT_FILE).sym
 
@@ -158,11 +158,10 @@ directories: | $(NEEDED_DIRS)
 depclean: $(foreach dfile,$(D_FILES),$(dfile)-clean)
 
 .PHONY: clean
-clean: $(foreach f,$(O_FILES) $(GCH_FILES) $(PROOF_FILES),$(f)-clean) \
-       docs-dirclean
+clean: $(foreach f,$(O_FILES) $(GCH_FILES) $(PROOF_FILES),$(f)-clean)
 
 .PHONY: allclean
-allclean: clean depclean
+allclean: clean depclean docs-dirclean
 
 .PHONY: wipe
 wipe: allclean $(OUT_DIR)-dirclean
