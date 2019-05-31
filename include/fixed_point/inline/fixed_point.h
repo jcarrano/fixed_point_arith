@@ -584,17 +584,24 @@ FXP_DECLARATION(frac f_clip (frac x, frac limit))
  * @return	If the addition would result in an overflow, return DFRAC_MAX
  * 		or DFRAC_MIN. Else, return the sum.
  */
+/*@
+ assigns \nothing;
+
+ ensures frac_r(\result) == fxp_clip(frac_r(x1) + frac_r(x2),
+				     dfrac_min, dfrac_max);
+*/
 FXP_DECLARATION(dfrac df_addsat(dfrac x1, dfrac x2))
 {
-	dfrac_base result = x1.v + x2.v;
 	dfrac r;
 
-	if (x1.v > 0 && x2.v > 0)
-		r.v = ((result < x1.v) ? DFRAC_MAX_V : result);
-	else if (x1.v < 0 && x2.v < 0)
-		r.v = ((result > x1.v) ? DFRAC_MIN_V : result);
+	/* The compiler does not seem to generate nice code for the
+	 * implementation below: */
+
+	if (x1.v >= 0)
+		r.v = (x2.v > DFRAC_MAX_V - x1.v)? DFRAC_MAX_V : x1.v + x2.v;
 	else
-		r.v = result;
+		r.v = (x2.v < DFRAC_MIN_V - x1.v) ? DFRAC_MIN_V : x1.v + x2.v;
+
 
 	return r;
 }
@@ -610,6 +617,12 @@ FXP_DECLARATION(dfrac df_addsat(dfrac x1, dfrac x2))
  *
  * @return		saturateds(z + x*y)
  */
+/*@
+ assigns \nothing;
+
+ ensures frac_r(\result) == fxp_clip(frac_r(z) + frac_r(x)*frac_r(y),
+				     dfrac_min, dfrac_max);
+*/
 FXP_DECLARATION(dfrac f_macs_df (frac x, frac y, dfrac z))
 {
 	return df_addsat(z, f_mul_df(x,y));
