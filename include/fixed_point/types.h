@@ -275,7 +275,7 @@ typedef dfrac frac_s32;	/*!< 32 bit signed fractional */
  *
  * This represents the same value as FRAC_1 (1 - 2**(-15)), but expressed as
  * a dfrac */
-#define DFRAC_almost1_V (-(INT32_MIN>>1)-1)
+#define DFRAC_almost1_V (FRAC_1_V<<(DFRAC_FBIT-FRAC_FBIT))
 
 /** dfrac for -1. */
 #define DFRAC_minus1_V (INT32_MIN>>1)
@@ -407,6 +407,19 @@ static void _fxp_frama_assertions1()
 
   logic ℝ fxp_clip(ℝ x, ℝ min, ℝ max) = \min(\max(x, min), max);
  */
+
+#ifdef __FRAMAC__
+/*@
+  assigns \nothing;
+ */
+static void _fxp_frama_assertions2()
+{
+	dfrac cDFRAC_almost1v = _dfrac(DFRAC_almost1_V);
+	frac cFRAC_1v = _frac(FRAC_1_V);
+
+	/*@ assert dfrac_almost1: frac_r(cDFRAC_almost1v) ≡ frac_r(cFRAC_1v); */
+}
+#endif /* __FRAMAC__ */
 
 /**
  * @defgroup frac_const FRAC Constants
