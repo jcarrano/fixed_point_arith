@@ -463,6 +463,8 @@ FXP_DECLARATION(dfrac df_shiftr(dfrac a, int16_t b))
 /**
  * Truncate to single precision.
  *
+ * 2.30 -> 1.15
+ *
  * Removes (truncates) excess fractional bits from a double precision number
  * and saturates the result to fit in tha range of fracs.
  *
@@ -471,16 +473,25 @@ FXP_DECLARATION(dfrac df_shiftr(dfrac a, int16_t b))
  *
  * @bug		Does not perform convergent rounding
  */
+/*@
+  // FIXME: make a better formalization of rounding errors.
+
+  assigns \nothing;
+
+  ensures -frac_eps <=
+		(frac_r(\result) - fxp_clip(frac_r(x), frac_min, frac_max))
+	  <= frac_eps;
+*/
 FXP_DECLARATION(frac df_to_f(dfrac x))
-{ /* 2.30 -> 1.15 */
+{
 	frac r;
 
-	if (x.v >= DFRAC_1_V)
+	if (x.v >= DFRAC_almost1_V)
 		r.v = FRAC_1_V;
 	else if ( x.v < DFRAC_minus1_V)
 		r.v = FRAC_minus1_V;
 	else
-		r.v = (x.v << 1) >> FRAC_BIT;
+		r.v = x.v / (1 << (DFRAC_FBIT - FRAC_FBIT));
 
 	return r;
 }
@@ -542,7 +553,7 @@ FXP_DECLARATION(efrac f_ef_div(frac dividend, efrac divisor))
 /*@
   assigns \nothing;
 
-  ensures frac_r(\result) == \min(\max(frac_r(x), frac_min), frac_max);
+  ensures frac_r(\result) == fxp_clip(frac_r(x), frac_min, frac_max);
  */
 FXP_DECLARATION(frac ef_to_f(efrac x))
 {
