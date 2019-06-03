@@ -142,11 +142,46 @@ static inline efrac _efrac(efrac_base v)
 	return r;
 }
 
-#define MFRAC_BIT (16)	/*!< Size in bits of a FRAC. */
+#define MFRAC_FBIT (8)  /*!< Size in bits of the fractional part of a MFRAC. */
+#define MFRAC_IBIT (8)  /*!< Size in bits of the integer part of a MFRAC. */
+#define MFRAC_BIT (16)	/*!< Size in bits of a MFRAC. */
+
+#define FRAC_FBIT (15)	/*!< Size in bits of the fractional part of a FRAC. */
+#define FRAC_IBIT (1)	/*!< Size in bits of the integer part of a FRAC. */
 #define FRAC_BIT (16)	/*!< Size in bits of a FRAC. */
+
+#define DFRAC_FBIT (30)	/*!< Size in bits of the fractional part of a DFRAC. */
+#define DFRAC_IBIT (2)	/*!< Size in bits of the integer part of a DFRAC. */
 #define DFRAC_BIT (32)	/*!< Size in bits of a DFRAC. */
+
+#define EFRAC_FBIT (15)	/*!< Size in bits of the fractional part of an EFRAC. */
+#define EFRAC_IBIT (17)	/*!< Size in bits of the integer part of an EFRAC. */
 #define EFRAC_BIT (32)	/*!< Size in bits of an EFRAC. */
 
+#ifdef __FRAMAC__
+/* Check that we are consistent with the bit lengths. This could be ensured
+ * by defining BIT as a sum, but we lose clarity.*/
+/*@
+  assigns \nothing;
+ */
+static void _fxp_frama_assertions0()
+{
+#define _FXP_FRAMA_EXPOSEI(X) unsigned int \
+	_c##X##_FBIT = X##_FBIT, _c##X##_IBIT = X##_IBIT, _c##X##_BIT = X##_BIT;
+
+	_FXP_FRAMA_EXPOSEI(MFRAC);
+	_FXP_FRAMA_EXPOSEI(FRAC);
+	_FXP_FRAMA_EXPOSEI(DFRAC);
+	_FXP_FRAMA_EXPOSEI(EFRAC);
+
+#undef _FXP_FRAMA_EXPOSEI
+
+	/*@ assert mfrac_fibit: _cMFRAC_BIT ≡ _cMFRAC_IBIT + _cMFRAC_FBIT; */
+	/*@ assert frac_fibit:   _cFRAC_BIT ≡  _cFRAC_IBIT +  _cFRAC_FBIT; */
+	/*@ assert dfrac_fibit: _cDFRAC_BIT ≡ _cDFRAC_IBIT + _cDFRAC_FBIT; */
+	/*@ assert efrac_fibit: _cEFRAC_BIT ≡ _cEFRAC_IBIT + _cEFRAC_FBIT; */
+}
+#endif /* __FRAMAC__ */
 
 /**
  * @addtogroup fxp_width
@@ -300,9 +335,6 @@ typedef dfrac frac_s32;	/*!< 32 bit signed fractional */
 
 */
 
-#define _FXP_FRAMA_EXPOSE3(type, X, Y, Z) type \
-	_c##X = X, _c##Y = Y, _c##Z = Z;
-
 /* Check that the constansts are right. This is suboptimal as we could be
  * forgetting one, but it is what it is.
  * We don't need to verify everything, only the stuff we use in the logic
@@ -312,31 +344,36 @@ typedef dfrac frac_s32;	/*!< 32 bit signed fractional */
 /*@
   assigns \nothing;
  */
-static void _fxp_frama_assertions()
+static void _fxp_frama_assertions1()
 {
-   _FXP_FRAMA_EXPOSE3(frac_base, FRAC_MAX_V, FRAC_MIN_V, FRAC_minus1_V)
+#define _FXP_FRAMA_EXPOSE3(type, X, Y, Z) type \
+	_c##X = X, _c##Y = Y, _c##Z = Z;
 
-   _FXP_FRAMA_EXPOSE3(dfrac_base, DFRAC_MAX_V , DFRAC_MIN_V , DFRAC_1_V)
+	_FXP_FRAMA_EXPOSE3(frac_base, FRAC_MAX_V, FRAC_MIN_V, FRAC_minus1_V)
 
-   _FXP_FRAMA_EXPOSE3(mfrac_base, MFRAC_MAX_V , MFRAC_MIN_V, MFRAC_1_V)
+	_FXP_FRAMA_EXPOSE3(dfrac_base, DFRAC_MAX_V , DFRAC_MIN_V , DFRAC_1_V)
 
-   _FXP_FRAMA_EXPOSE3(efrac_base, EFRAC_MAX_V, EFRAC_MIN_V, EFRAC_1_V)
+	_FXP_FRAMA_EXPOSE3(mfrac_base, MFRAC_MAX_V , MFRAC_MIN_V, MFRAC_1_V)
 
-   /*@ assert Fmin: frac_minv    ≡ _cFRAC_MIN_V;      */
-   /*@ assert F1:   frac_minus1v ≡ _cFRAC_minus1_V;   */
-   /*@ assert FMax: frac_maxv    ≡ _cFRAC_MAX_V;      */
+	_FXP_FRAMA_EXPOSE3(efrac_base, EFRAC_MAX_V, EFRAC_MIN_V, EFRAC_1_V)
 
-   /*@ assert Dmin: dfrac_minv ≡ _cDFRAC_MIN_V;       */
-   /*@ assert D1:   dfrac_1v   ≡ _cDFRAC_1_V;         */
-   /*@ assert DMax: dfrac_maxv ≡ _cDFRAC_MAX_V;       */
+#undef _FXP_FRAMA_EXPOSE3
 
-   /*@ assert Emin: efrac_minv ≡ _cEFRAC_MIN_V;       */
-   /*@ assert E1:   efrac_1v   ≡ _cEFRAC_1_V;         */
-   /*@ assert EMax: efrac_maxv ≡ _cEFRAC_MAX_V;       */
+	/*@ assert Fmin: frac_minv    ≡ _cFRAC_MIN_V;      */
+	/*@ assert F1:   frac_minus1v ≡ _cFRAC_minus1_V;   */
+	/*@ assert FMax: frac_maxv    ≡ _cFRAC_MAX_V;      */
 
-   /*@ assert Mmin: mfrac_minv ≡ _cMFRAC_MIN_V;       */
-   /*@ assert M1:   mfrac_1v   ≡ _cMFRAC_1_V;         */
-   /*@ assert MMax: mfrac_maxv ≡ _cMFRAC_MAX_V;	*/
+	/*@ assert Dmin: dfrac_minv ≡ _cDFRAC_MIN_V;       */
+	/*@ assert D1:   dfrac_1v   ≡ _cDFRAC_1_V;         */
+	/*@ assert DMax: dfrac_maxv ≡ _cDFRAC_MAX_V;       */
+
+	/*@ assert Emin: efrac_minv ≡ _cEFRAC_MIN_V;       */
+	/*@ assert E1:   efrac_1v   ≡ _cEFRAC_1_V;         */
+	/*@ assert EMax: efrac_maxv ≡ _cEFRAC_MAX_V;       */
+
+	/*@ assert Mmin: mfrac_minv ≡ _cMFRAC_MIN_V;       */
+	/*@ assert M1:   mfrac_1v   ≡ _cMFRAC_1_V;         */
+	/*@ assert MMax: mfrac_maxv ≡ _cMFRAC_MAX_V;	*/
 }
 
 #endif /* __FRAMAC__ */
