@@ -140,9 +140,20 @@ static inline efrac _efrac(efrac_base v)
 	return r;
 }
 
-#define MFRAC_BIT (16)	/*!< Size in bits of a FRAC. */
+#define MFRAC_FBIT (8)  /*!< Size in bits of the fractional part of a MFRAC. */
+#define MFRAC_IBIT (8)  /*!< Size in bits of the integer part of a MFRAC. */
+#define MFRAC_BIT (16)	/*!< Size in bits of a MFRAC. */
+
+#define FRAC_FBIT (15)	/*!< Size in bits of the fractional part of a FRAC. */
+#define FRAC_IBIT (1)	/*!< Size in bits of the integer part of a FRAC. */
 #define FRAC_BIT (16)	/*!< Size in bits of a FRAC. */
+
+#define DFRAC_FBIT (30)	/*!< Size in bits of the fractional part of a DFRAC. */
+#define DFRAC_IBIT (2)	/*!< Size in bits of the integer part of a DFRAC. */
 #define DFRAC_BIT (32)	/*!< Size in bits of a DFRAC. */
+
+#define EFRAC_FBIT (15)	/*!< Size in bits of the fractional part of an EFRAC. */
+#define EFRAC_IBIT (17)	/*!< Size in bits of the integer part of an EFRAC. */
 #define EFRAC_BIT (32)	/*!< Size in bits of an EFRAC. */
 
 /**
@@ -234,7 +245,7 @@ typedef dfrac frac_s32;	/*!< 32 bit signed fractional */
  *
  * This represents the same value as FRAC_1 (1 - 2**(-15)), but expressed as
  * a dfrac */
-#define DFRAC_almost1_V (-(INT32_MIN>>1)-1)
+#define DFRAC_almost1_V (FRAC_1_V<<(DFRAC_FBIT-FRAC_FBIT))
 
 /** dfrac for -1. */
 #define DFRAC_minus1_V (INT32_MIN>>1)
