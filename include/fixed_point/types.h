@@ -243,7 +243,7 @@ typedef dfrac frac_s32;	/*!< 32 bit signed fractional */
 #define FRAC_1_V INT16_MAX
 
 /** frac representing 0.5 */
-#define FRAC_0_5_V (-(INT16_MIN>>1))
+#define FRAC_0_5_V (-(INT16_MIN/2))
 
 /** frac representing -1.
 * This is the smallest value a frac can take*/
@@ -265,10 +265,10 @@ typedef dfrac frac_s32;	/*!< 32 bit signed fractional */
 
 /** Unit value for the dfrac type.
  * It represents the value 1.*/
-#define DFRAC_1_V (-(INT32_MIN>>1))
+#define DFRAC_1_V (-(INT32_MIN/2))
 
 /** dfrac representing 0.5 */
-#define DFRAC_0_5_V (-(INT32_MIN>>2))
+#define DFRAC_0_5_V (DFRAC_1_V/2)
 
 /**
  * dfrac equivalent to FRAC_1
@@ -278,7 +278,7 @@ typedef dfrac frac_s32;	/*!< 32 bit signed fractional */
 #define DFRAC_almost1_V (FRAC_1_V<<(DFRAC_FBIT-FRAC_FBIT))
 
 /** dfrac for -1. */
-#define DFRAC_minus1_V (INT32_MIN>>1)
+#define DFRAC_minus1_V (INT32_MIN/2)
 
 /** Maximum (most positive) value for a dfrac.
  * Represents 2 - 2**(-31), or "almost 2" */
