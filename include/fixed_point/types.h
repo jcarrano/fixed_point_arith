@@ -95,12 +95,20 @@ typedef struct {
  * The main reason for defining efracs as Q17.15 is that casting fracs to
  * (int32_t) and adding them naturally results in a 17.15 value.
  */
+/*@
+  assigns \nothing;
+  ensures \result.v == v;
+ */
 typedef struct {
 	efrac_base v;
 } efrac;
 
 /**
  * Make a dfrac from its base value.
+ */
+/*@
+  assigns \nothing;
+  ensures \result.v == v;
  */
 static inline frac _frac(frac_base v)
 {
@@ -111,6 +119,10 @@ static inline frac _frac(frac_base v)
 /**
  * Make a dfrac from its base value.
  */
+/*@
+  assigns \nothing;
+  ensures \result.v == v;
+ */
 static inline dfrac _dfrac(dfrac_base v)
 {
 	dfrac r = {v};
@@ -119,6 +131,10 @@ static inline dfrac _dfrac(dfrac_base v)
 
 /**
  * Make a efrac from its base value.
+ */
+/*@
+  assigns \nothing;
+  ensures \result.v == v;
  */
 static inline efrac _efrac(efrac_base v)
 {
